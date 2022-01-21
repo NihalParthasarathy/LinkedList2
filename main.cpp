@@ -5,12 +5,13 @@
 
 using namespace std;
 
-void add(Student* s, Node* next);
+void add(Student* s, Node* &head, Node* prev, Node* curr, int compareID);
 void print(Node* next);
-
-Node* head = NULL;
+void deleteStudent();
+void avarage();
 
 int main() {
+  Node* head = NULL;
   bool playing = true;
   cout << "Welcome to StudentList" << endl;
   
@@ -22,17 +23,18 @@ int main() {
     float gpa;
     cout << "Would you like to ADD, PRINT, DELETE, AVARAGE, or QUIT" << endl;
     if (strcmp(input, "ADD") == 0) {//Calls the add function
-      Student* student;
+      Student* temp;
       cout << "Enter first name" << endl;
-      cin >> first;
+      cin >> temp->first;
       cout << "Enter last name" << endl;
-      cin >> last;
+      cin >> temp->last;
       cout << "Enter id number" << endl;
-      cin >> id;
+      cin >> temp->id;
       cout << "Enter GPA" << endl;
-      cin >> gpa;
-      student->setStudent(first, last, id, gpa);
-      add(student);
+      cin >> temp->gpa;
+      temp->setStudent(first, last, id, gpa);
+      int value = temp->id;
+      add(temp, head, value);
     }
     else if (strcmp(input, "PRINT") == 0) {//Calls the print function
       print();
@@ -50,13 +52,16 @@ int main() {
 
 }
 
-void add(Student* s, Node* next) {
-  Node* current = head;
-  if (current == NULL) {
-   next = new Node(s);
+void add(Student* s, Node* &head, Node* prev, Node* curr, int compareID) {
+  if (head == NULL) {
+    head = new Node(s);
   }
-  else {
-    
+  else if (curr == NULL) {
+    prev->setNext() = new Node(s);
+  }
+  else if (compareID < curr->getStudent()->id) {
+    prev->setNext() = new Node(s);
+    prev->setNext()->setNext() = curr;
   }
 }
 
