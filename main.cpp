@@ -1,3 +1,8 @@
+//Nihal Parthasarathy
+//1/29/2022
+//This code runs a studentlist where you can add, print, delete and avarage students. This is acomplished using linkedlists
+
+//Inclusions
 #include <iostream>
 #include <cstring>
 #include <iomanip>
@@ -6,6 +11,7 @@
 
 using namespace std;
 
+//Function Prototypes
 void add(Student* s, Node* &head, Node* prev, Node* curr, int compareID);
 void print(Node* next);
 void deleteStudent(Node* &head, Node* prev, Node* curr, int nInput);
@@ -13,36 +19,41 @@ void avarage(Node* next, int count, float nSum);
 void printIT(Node* next);
 
 int main() {
-  Node* head = NULL;
+  
+  Node* head = NULL; //Initilizes head
   bool playing = true;
+  
   cout << "Welcome to StudentList" << endl;
   
-  while (playing == true) {
+  while (playing == true) {//While loop to see if user still going
+    //Varubles
     char input[10];
     char first[50];
     char last[50];
     int id;
     float gpa;
+    
     cout << "Would you like to ADD, PRINT, DELETE, AVARAGE, or QUIT" << endl;
     cin >> input;
+    
     Student* temp = new Student();
+    
     if (strcmp(input, "ADD") == 0) {//Calls the add function
       cout << "Enter first name" << endl;
-      cin >> temp->first;
+      cin >> temp->first; //Adds first to temp
       cout << "Enter last name" << endl;
-      cin >> temp->last;
+      cin >> temp->last; //Adds last to temp
       cout << "Enter id number" << endl;
-      cin >> temp->id;
+      cin >> temp->id; //Adds Id to temp
       cout << "Enter GPA" << endl;
-      cin >> temp->gpa;
-      //temp->setStudent(first, last, id, gpa);
-      //temp->printStudent();
+      cin >> temp->gpa; //Adds gpa to temp
+      
       int value = temp->id;
-      add(temp, head, head, head, value);
+      
+      add(temp, head, head, head, value);//Calls add function
     }
     else if (strcmp(input, "PRINT") == 0) {//Calls the print function
       print(head);
-      //printIT(head);
     }
     else if (strcmp(input, "DELETE") == 0) {//Calls the delete function
        int input;
@@ -50,95 +61,80 @@ int main() {
        cin >>input;
        deleteStudent(head, head, head, input);
     }
-    else if (strcmp(input, "AVARAGE") == 0) {
+    else if (strcmp(input, "AVARAGE") == 0) {//Calls the avarage function
       int avarageCount = 0;
       int sum = 0;
       avarage(head, avarageCount, sum);
     }
     else if (strcmp(input, "QUIT") == 0) {//Returns false
-      playing = false;
+      playing = false;//Exits while Loop stopping game
     }
   }
 
 }
 
-void add(Student* s, Node* &head, Node* prev, Node* curr, int compareID) {
-  if (head == NULL) {
-    head = new Node(s);
-    head->setNext(NULL);
+void add(Student* s, Node* &head, Node* prev, Node* curr, int compareID) {//Adds student
+  if (head == NULL) {//Checks if head is null
+    head = new Node(s); //Makes new node
+    head->setNext(NULL); //Sets next to NUll
   }
-  else if (curr == NULL) {
-    cout << "daso" << endl;
-    prev->setNext(new Node(s));
-    prev->getNext()->setNext(NULL);
+  else if (curr == NULL) {//Checks if adding to end of list
+    prev->setNext(new Node(s));//Sets prev next to new node
+    prev->getNext()->setNext(NULL);//Sets new nodes nest to NULL
   }
-  else if (compareID < head->getStudent()->id) {
+  else if (compareID < head->getStudent()->id) {//Checks to see if the id number is less than head id
     Node* temp = head;
-    head = new Node(s);
-    head->setNext(temp);// = temp;
+    head = new Node(s);//New node
+    head->setNext(temp);
   }
-  else if (compareID < curr->getStudent()->id) {
-    prev->setNext(new Node(s)); //= new Node(s);
-    prev->getNext()->setNext(curr);// = curr;
+  else if (compareID < curr->getStudent()->id) {//Checks to see if id number less than curr id
+    prev->setNext(new Node(s)); //sets next to new node
+    prev->getNext()->setNext(curr);
   }
   else {
-    cout << "Going again" << endl;
-    add(s, head, curr, curr->getNext(), compareID);
+    add(s, head, curr, curr->getNext(), compareID);//recalls it
   }
 }
 
-void printIT(Node* next) {
-  Node* current = next;
-  while (current != NULL) {
-    current->getStudent()->printStudent();
-    current = current->getNext();
-  }
-}
 void print(Node* next) {
-  /*if (next == head) {
-    cout << "List:" << endl;
-  }*/
-  if (next != NULL) {
-    //next->printStudent();
-    next->getStudent()->printStudent();
-    print(next->getNext());
+  if (next != NULL) {//If next is not equal to null
+    next->getStudent()->printStudent(); //Prints next's student
+    print(next->getNext());//Recalls function
   }
 }
 
-void deleteStudent(Node* &head, Node* prev, Node* curr, int nInput) {
+void deleteStudent(Node* &head, Node* prev, Node* curr, int nInput) {//Deletes student
   if (head == NULL) {
     cout << "No students to delete" << endl;
   }
-  else if (nInput == curr->getStudent()->id) {
-    if (curr == head) {
-      head = head->getNext();
-      curr->setNext(NULL);
-      curr->~Node();
-      return;
+  else if (nInput == curr->getStudent()->id) {//If the input is equal to curr student
+    if (curr == head) {//If your deleting the first node
+      head = head->getNext();//Sets head to its next
+      curr->setNext(NULL);//Next to null
+      curr->~Node();//Deletes
+      return;//Returns
     }
     else {
       prev->setNext(curr->getNext());
       curr->setNext(NULL);
-      curr->~Node();
-      return;
+      curr->~Node();//Deletes
+      return;//Returns
     }
-    //curr = prev->next->next;
-    //prev = pre->next;
   }
   else {
-    deleteStudent(head, curr, curr->getNext(), nInput);
+    deleteStudent(head, curr, curr->getNext(), nInput);//Recalls function
   }
 }
 
-void avarage(Node* next, int count, float nSum) {
+void avarage(Node* next, int count, float nSum) {//Avarages
   if (next != NULL) {
     count++;
-    nSum += next->getStudent()->gpa;
-    avarage(next->getNext(), count, nSum);
+    nSum += next->getStudent()->gpa;//Adds the gpas
+    avarage(next->getNext(), count, nSum);//Recalls function
   }
   else {
-    nSum = nSum/count;
-    cout << fixed << showpoint << setprecision(2) << nSum << endl;
+    nSum = nSum/count;//Divides
+    cout << fixed << showpoint << setprecision(2) << nSum << endl;//Prints it and sets percision
   }
 
 }
