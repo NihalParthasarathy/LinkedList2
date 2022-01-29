@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <iomanip>
 #include "Node.h"
 #include "Student.h"
 
@@ -7,8 +8,8 @@ using namespace std;
 
 void add(Student* s, Node* &head, Node* prev, Node* curr, int compareID);
 void print(Node* next);
-void deleteStudent();
-void avarage();
+void deleteStudent(Node* &head, Node* prev, Node* curr, int nInput);
+void avarage(Node* next, int count, float nSum);
 void printIT(Node* next);
 
 int main() {
@@ -24,8 +25,8 @@ int main() {
     float gpa;
     cout << "Would you like to ADD, PRINT, DELETE, AVARAGE, or QUIT" << endl;
     cin >> input;
+    Student* temp = new Student();
     if (strcmp(input, "ADD") == 0) {//Calls the add function
-      Student* temp = new Student();
       cout << "Enter first name" << endl;
       cin >> temp->first;
       cout << "Enter last name" << endl;
@@ -44,10 +45,15 @@ int main() {
       //printIT(head);
     }
     else if (strcmp(input, "DELETE") == 0) {//Calls the delete function
-      //delete();
+       int input;
+       cout << "Enter the ID of the student you want to delete" << endl;
+       cin >>input;
+       deleteStudent(head, head, head, input);
     }
     else if (strcmp(input, "AVARAGE") == 0) {
-
+      int avarageCount = 0;
+      int sum = 0;
+      avarage(head, avarageCount, sum);
     }
     else if (strcmp(input, "QUIT") == 0) {//Returns false
       playing = false;
@@ -99,3 +105,40 @@ void print(Node* next) {
   }
 }
 
+void deleteStudent(Node* &head, Node* prev, Node* curr, int nInput) {
+  if (head == NULL) {
+    cout << "No students to delete" << endl;
+  }
+  else if (nInput == curr->getStudent()->id) {
+    if (curr == head) {
+      head = head->getNext();
+      curr->setNext(NULL);
+      curr->~Node();
+      return;
+    }
+    else {
+      prev->setNext(curr->getNext());
+      curr->setNext(NULL);
+      curr->~Node();
+      return;
+    }
+    //curr = prev->next->next;
+    //prev = pre->next;
+  }
+  else {
+    deleteStudent(head, curr, curr->getNext(), nInput);
+  }
+}
+
+void avarage(Node* next, int count, float nSum) {
+  if (next != NULL) {
+    count++;
+    nSum += next->getStudent()->gpa;
+    avarage(next->getNext(), count, nSum);
+  }
+  else {
+    nSum = nSum/count;
+    cout << fixed << showpoint << setprecision(2) << nSum << endl;
+  }
+
+}
